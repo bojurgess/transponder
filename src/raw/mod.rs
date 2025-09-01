@@ -1,4 +1,5 @@
 pub mod car_setups;
+pub mod car_telemetry;
 pub mod constants;
 pub mod event;
 pub mod header;
@@ -8,6 +9,7 @@ pub mod participants;
 pub mod session;
 
 pub use car_setups::*;
+pub use car_telemetry::*;
 pub use event::*;
 pub use header::*;
 pub use lap::*;
