@@ -39,9 +39,17 @@ impl RawPacket for PacketMotionData {
     fn header(&self) -> &PacketHeader {
         &self.header
     }
-    fn from_bytes(bytes: &[u8]) -> Result<Self, crate::packet::PacketError> {
-        bytemuck::try_from_bytes(bytes)
+    fn from_bytes(bytes: &[u8]) -> Result<Self, PacketError> {
+        let expected_len = std::mem::size_of::<Self>();
+        if bytes.len() != expected_len {
+            return Err(PacketError::InvalidLength {
+                expected: expected_len,
+                actual: bytes.len(),
+            });
+        }
+
+        bytemuck::try_from_bytes::<Self>(bytes)
             .map(|p| *p)
-            .map_err(|_| PacketError)
+            .map_err(|e| PacketError::BytemuckError(e.to_string()))
     }
 }
