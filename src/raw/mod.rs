@@ -1,3 +1,4 @@
+pub mod car_setups;
 pub mod constants;
 pub mod event;
 pub mod header;
@@ -6,6 +7,7 @@ pub mod motion;
 pub mod participants;
 pub mod session;
 
+pub use car_setups::*;
 pub use event::*;
 pub use header::*;
 pub use lap::*;
