@@ -1,10 +1,11 @@
 use bytemuck::{Pod, Zeroable};
 
 use crate::{
+    assert_packet_size,
     packet::{PacketError, RawPacket},
     raw::{
         PacketHeader,
-        constants::{MAX_NUM_LAPS_IN_SESSION_HISTORY, MAX_TYRE_STINTS},
+        constants::{MAX_NUM_LAPS_IN_SESSION_HISTORY, MAX_TYRE_STINTS, packet_sizes},
     },
 };
 
@@ -87,3 +88,5 @@ impl RawPacket for PacketSessionHistoryData {
             .map_err(|e| PacketError::BytemuckError(e.to_string()))
     }
 }
+
+assert_packet_size!(PacketSessionHistoryData, packet_sizes::SESSION_HISTORY);

@@ -1,11 +1,13 @@
 use bytemuck::{Pod, Zeroable};
 
 use crate::{
+    assert_packet_size,
     packet::{PacketError, RawPacket},
     raw::{
         PacketHeader,
         constants::{
             MAX_MARSHALLS_ZONE_PER_LAP, MAX_SESSIONS_IN_WEEKEND, MAX_WEATHER_FORECAST_SAMPLES,
+            packet_sizes,
         },
     },
 };
@@ -220,3 +222,5 @@ impl RawPacket for PacketSessionData {
             .map_err(|e| PacketError::BytemuckError(e.to_string()))
     }
 }
+
+assert_packet_size!(PacketSessionData, packet_sizes::SESSION);

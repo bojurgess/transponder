@@ -46,3 +46,16 @@ impl fmt::Display for PacketError {
         }
     }
 }
+
+#[macro_export]
+macro_rules! assert_packet_size {
+    ($struct:ty, $size:expr) => {
+        const _: () = {
+            use std::mem::size_of;
+            assert!(
+                size_of::<$struct>() == $size,
+                concat!("Size mismatch for ", stringify!($struct))
+            );
+        };
+    };
+}

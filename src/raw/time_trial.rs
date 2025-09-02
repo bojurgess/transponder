@@ -1,8 +1,9 @@
 use bytemuck::{Pod, Zeroable};
 
 use crate::{
+    assert_packet_size,
     packet::{PacketError, RawPacket},
-    raw::PacketHeader,
+    raw::{PacketHeader, constants::packet_sizes},
 };
 
 #[repr(C, packed)]
@@ -65,3 +66,5 @@ impl RawPacket for PacketTimeTrialData {
             .map_err(|e| PacketError::BytemuckError(e.to_string()))
     }
 }
+
+assert_packet_size!(PacketTimeTrialData, packet_sizes::TIME_TRIAL);

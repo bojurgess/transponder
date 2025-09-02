@@ -1,10 +1,11 @@
 use bytemuck::{Pod, Zeroable};
 
 use crate::{
+    assert_packet_size,
     packet::{PacketError, RawPacket},
     raw::{
         PacketHeader,
-        constants::{MAX_NUM_CARS, MAX_TYRE_STINTS},
+        constants::{MAX_NUM_CARS, MAX_TYRE_STINTS, packet_sizes},
     },
 };
 
@@ -73,3 +74,8 @@ impl RawPacket for PacketFinalClassificationData {
             .map_err(|e| PacketError::BytemuckError(e.to_string()))
     }
 }
+
+assert_packet_size!(
+    PacketFinalClassificationData,
+    packet_sizes::FINAL_CLASSIFICATION
+);

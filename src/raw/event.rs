@@ -1,8 +1,12 @@
 use bytemuck::{Pod, Zeroable};
 
 use crate::{
+    assert_packet_size,
     packet::{PacketError, RawPacket},
-    raw::{PacketHeader, constants::event::EVENT_STRING_CODE_LEN},
+    raw::{
+        PacketHeader,
+        constants::{event::EVENT_STRING_CODE_LEN, packet_sizes},
+    },
 };
 
 #[repr(C, packed)]
@@ -222,3 +226,5 @@ impl RawPacket for PacketEventData {
         })
     }
 }
+
+assert_packet_size!(PacketEventData, packet_sizes::EVENT);

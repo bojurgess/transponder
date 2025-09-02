@@ -1,6 +1,10 @@
 use bytemuck::{Pod, Zeroable};
 
-use crate::packet::{PacketError, RawPacket};
+use crate::{
+    assert_packet_size,
+    packet::{PacketError, RawPacket},
+    raw::constants::packet_sizes,
+};
 
 #[repr(C, packed)]
 #[derive(Clone, Copy, Debug, Pod, Zeroable)]
@@ -37,3 +41,5 @@ impl RawPacket for PacketHeader {
             .map_err(|e| PacketError::BytemuckError(e.to_string()))
     }
 }
+
+assert_packet_size!(PacketHeader, packet_sizes::HEADER);

@@ -1,8 +1,9 @@
 use bytemuck::{Pod, Zeroable};
 
 use crate::{
+    assert_packet_size,
     packet::{PacketError, RawPacket},
-    raw::PacketHeader,
+    raw::{PacketHeader, constants::packet_sizes},
 };
 
 #[repr(C, packed)]
@@ -86,3 +87,5 @@ impl RawPacket for PacketMotionExData {
             .map_err(|e| PacketError::BytemuckError(e.to_string()))
     }
 }
+
+assert_packet_size!(PacketMotionExData, packet_sizes::MOTION_EX);

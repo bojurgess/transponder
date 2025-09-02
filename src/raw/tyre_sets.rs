@@ -1,8 +1,12 @@
 use bytemuck::{Pod, Zeroable};
 
 use crate::{
+    assert_packet_size,
     packet::{PacketError, RawPacket},
-    raw::{PacketHeader, constants::MAX_TYRE_SETS},
+    raw::{
+        PacketHeader,
+        constants::{MAX_TYRE_SETS, packet_sizes},
+    },
 };
 
 #[repr(C, packed)]
@@ -59,3 +63,5 @@ impl RawPacket for PacketTyreSetsData {
             .map_err(|e| PacketError::BytemuckError(e.to_string()))
     }
 }
+
+assert_packet_size!(PacketTyreSetsData, packet_sizes::TYRE_SETS);
