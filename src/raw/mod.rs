@@ -13,6 +13,7 @@ pub mod motion_ex;
 pub mod participants;
 pub mod session;
 pub mod session_history;
+pub mod time_trial;
 pub mod tyre_sets;
 
 pub use car_damage::*;
@@ -29,4 +30,5 @@ pub use motion_ex::*;
 pub use participants::*;
 pub use session::*;
 pub use session_history::*;
+pub use time_trial::*;
 pub use tyre_sets::*;
