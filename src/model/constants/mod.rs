@@ -1,3 +1,4 @@
+pub mod button_flags;
 pub mod drivers;
 pub mod game_modes;
 pub mod nationalities;
@@ -7,6 +8,7 @@ pub mod surface_types;
 pub mod teams;
 pub mod tracks;
 
+pub use button_flags::*;
 pub use drivers::*;
 pub use game_modes::*;
 pub use nationalities::*;
