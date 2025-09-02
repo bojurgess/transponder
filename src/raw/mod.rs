@@ -12,6 +12,7 @@ pub mod motion;
 pub mod participants;
 pub mod session;
 pub mod session_history;
+pub mod tyre_sets;
 
 pub use car_damage::*;
 pub use car_setups::*;
@@ -26,3 +27,4 @@ pub use motion::*;
 pub use participants::*;
 pub use session::*;
 pub use session_history::*;
+pub use tyre_sets::*;
