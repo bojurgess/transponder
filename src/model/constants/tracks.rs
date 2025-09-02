@@ -1,0 +1,31 @@
+use crate::utils::define_appendix;
+
+define_appendix!(TrackId {
+    0 => Melbourne => "Melbourne",
+    2 => Shanghai => "Shanghai",
+    3 => Sakhir => "Sakhir (Bahrain)",
+    4 => Catalunya => "Catalunya",
+    5 => Monaco => "Monaco",
+    6 => Montreal => "Montreal",
+    7 => Silverstone => "Silverstone",
+    9 => Hungaroring => "Hungaroring",
+    10 => Spa => "Spa",
+    11 => Monza => "Monza",
+    12 => Singapore => "Singapore",
+    13 => Suzuka => "Suzuka",
+    14 => AbuDhabi => "AbuDhabi",
+    15 => Texas => "Texas",
+    16 => Brazil => "Brazil",
+    17 => Austria => "Austria",
+    19 => Mexico => "Mexico",
+    20 => Baku => "Baku (Azerbaijan)",
+    26 => Zandvoort => "Zandvoort",
+    27 => Imola => "Imola",
+    29 => Jeddah => "Jeddah",
+    30 => Miami => "Miami",
+    31 => LasVegas => "Las Vegas",
+    32 => Losail => "Losail",
+    39 => SilverstoneReverse => "Silverstone (Reverse)",
+    40 => AustriaReverse => "Austria (Reverse)",
+    41 => ZandvoortReverse => "Zandvoort (Reverse)"
+});
