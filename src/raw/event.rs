@@ -1,3 +1,5 @@
+use std::fmt;
+
 use bytemuck::{Pod, Zeroable};
 
 use crate::{
@@ -241,6 +243,27 @@ impl RawPacket for PacketEventData {
                 std::mem::size_of::<Self>(),
             )
         }
+    }
+}
+
+impl fmt::Debug for PacketEventData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut ds = f.debug_struct("PacketEventData");
+
+        ds.field("header", &self.header);
+
+        let code_str = std::str::from_utf8(&self.event_string_code).unwrap_or("<invalid utf8>");
+        ds.field("event_string_code", &code_str);
+
+        unsafe {
+            let bytes = std::slice::from_raw_parts(
+                &self.event_details as *const _ as *const u8,
+                std::mem::size_of::<EventDataDetails>(),
+            );
+            ds.field("event_details_bytes", &bytes);
+        }
+
+        ds.finish()
     }
 }
 
