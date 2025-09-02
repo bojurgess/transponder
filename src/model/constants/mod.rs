@@ -1,6 +1,7 @@
 pub mod button_flags;
 pub mod drivers;
 pub mod game_modes;
+pub mod infringements;
 pub mod nationalities;
 pub mod penalties;
 pub mod rulesets;
@@ -12,6 +13,7 @@ pub mod tracks;
 pub use button_flags::*;
 pub use drivers::*;
 pub use game_modes::*;
+pub use infringements::*;
 pub use nationalities::*;
 pub use penalties::*;
 pub use rulesets::*;
