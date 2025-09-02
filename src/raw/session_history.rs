@@ -2,7 +2,7 @@ use bytemuck::{Pod, Zeroable};
 
 use crate::{
     assert_packet_size,
-    packet::{PacketError, RawPacket},
+    packet::impl_has_header,
     raw::{
         PacketHeader,
         constants::{MAX_NUM_LAPS_IN_SESSION_HISTORY, MAX_TYRE_STINTS, packet_sizes},
@@ -70,23 +70,6 @@ pub struct PacketSessionHistoryData {
     pub tyre_stints_history_data: [TyreStintHistoryData; MAX_TYRE_STINTS],
 }
 
-impl RawPacket for PacketSessionHistoryData {
-    fn header(&self) -> &PacketHeader {
-        &self.header
-    }
-    fn from_bytes(bytes: &[u8]) -> Result<Self, PacketError> {
-        let expected_len = std::mem::size_of::<Self>();
-        if bytes.len() != expected_len {
-            return Err(PacketError::InvalidLength {
-                expected: expected_len,
-                actual: bytes.len(),
-            });
-        }
-
-        bytemuck::try_from_bytes::<Self>(bytes)
-            .map(|p| *p)
-            .map_err(|e| PacketError::BytemuckError(e.to_string()))
-    }
-}
+impl_has_header!(PacketSessionHistoryData);
 
 assert_packet_size!(PacketSessionHistoryData, packet_sizes::SESSION_HISTORY);

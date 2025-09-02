@@ -2,7 +2,7 @@ use bytemuck::{Pod, Zeroable};
 
 use crate::{
     assert_packet_size,
-    packet::{PacketError, RawPacket},
+    packet::impl_has_header,
     raw::{PacketHeader, constants::packet_sizes},
 };
 
@@ -48,23 +48,6 @@ pub struct PacketTimeTrialData {
     pub rival_data_set: TimeTrialDataSet,
 }
 
-impl RawPacket for PacketTimeTrialData {
-    fn header(&self) -> &PacketHeader {
-        &self.header
-    }
-    fn from_bytes(bytes: &[u8]) -> Result<Self, PacketError> {
-        let expected_len = std::mem::size_of::<Self>();
-        if bytes.len() != expected_len {
-            return Err(PacketError::InvalidLength {
-                expected: expected_len,
-                actual: bytes.len(),
-            });
-        }
-
-        bytemuck::try_from_bytes::<Self>(bytes)
-            .map(|p| *p)
-            .map_err(|e| PacketError::BytemuckError(e.to_string()))
-    }
-}
+impl_has_header!(PacketTimeTrialData);
 
 assert_packet_size!(PacketTimeTrialData, packet_sizes::TIME_TRIAL);

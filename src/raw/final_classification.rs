@@ -2,7 +2,7 @@ use bytemuck::{Pod, Zeroable};
 
 use crate::{
     assert_packet_size,
-    packet::{PacketError, RawPacket},
+    packet::impl_has_header,
     raw::{
         PacketHeader,
         constants::{MAX_NUM_CARS, MAX_TYRE_STINTS, packet_sizes},
@@ -56,24 +56,7 @@ pub struct PacketFinalClassificationData {
     pub classification_data: [FinalClassificationData; MAX_NUM_CARS],
 }
 
-impl RawPacket for PacketFinalClassificationData {
-    fn header(&self) -> &PacketHeader {
-        &self.header
-    }
-    fn from_bytes(bytes: &[u8]) -> Result<Self, PacketError> {
-        let expected_len = std::mem::size_of::<Self>();
-        if bytes.len() != expected_len {
-            return Err(PacketError::InvalidLength {
-                expected: expected_len,
-                actual: bytes.len(),
-            });
-        }
-
-        bytemuck::try_from_bytes::<Self>(bytes)
-            .map(|p| *p)
-            .map_err(|e| PacketError::BytemuckError(e.to_string()))
-    }
-}
+impl_has_header!(PacketFinalClassificationData);
 
 assert_packet_size!(
     PacketFinalClassificationData,

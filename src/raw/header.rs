@@ -24,9 +24,6 @@ pub struct PacketHeader {
 }
 
 impl RawPacket for PacketHeader {
-    fn header(&self) -> &PacketHeader {
-        self
-    }
     fn from_bytes(bytes: &[u8]) -> Result<Self, PacketError> {
         let expected_len = std::mem::size_of::<Self>();
         if bytes.len() != expected_len {
@@ -35,10 +32,13 @@ impl RawPacket for PacketHeader {
                 actual: bytes.len(),
             });
         }
-
-        bytemuck::try_from_bytes::<Self>(bytes)
+        bytemuck::try_from_bytes(bytes)
             .map(|p| *p)
-            .map_err(|e| PacketError::BytemuckError(e.to_string()))
+            .map_err(|_| PacketError::InvalidData)
+    }
+
+    fn into_bytes(&self) -> &[u8] {
+        bytemuck::bytes_of(self)
     }
 }
 

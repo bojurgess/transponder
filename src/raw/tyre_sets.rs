@@ -2,7 +2,7 @@ use bytemuck::{Pod, Zeroable};
 
 use crate::{
     assert_packet_size,
-    packet::{PacketError, RawPacket},
+    packet::impl_has_header,
     raw::{
         PacketHeader,
         constants::{MAX_TYRE_SETS, packet_sizes},
@@ -45,23 +45,6 @@ pub struct PacketTyreSetsData {
     pub fitted_idx: u8,
 }
 
-impl RawPacket for PacketTyreSetsData {
-    fn header(&self) -> &PacketHeader {
-        &self.header
-    }
-    fn from_bytes(bytes: &[u8]) -> Result<Self, PacketError> {
-        let expected_len = std::mem::size_of::<Self>();
-        if bytes.len() != expected_len {
-            return Err(PacketError::InvalidLength {
-                expected: expected_len,
-                actual: bytes.len(),
-            });
-        }
-
-        bytemuck::try_from_bytes::<Self>(bytes)
-            .map(|p| *p)
-            .map_err(|e| PacketError::BytemuckError(e.to_string()))
-    }
-}
+impl_has_header!(PacketTyreSetsData);
 
 assert_packet_size!(PacketTyreSetsData, packet_sizes::TYRE_SETS);

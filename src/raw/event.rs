@@ -2,7 +2,7 @@ use bytemuck::{Pod, Zeroable};
 
 use crate::{
     assert_packet_size,
-    packet::{PacketError, RawPacket},
+    packet::{PacketError, RawPacket, impl_has_header},
     raw::{
         PacketHeader,
         constants::{event::EVENT_STRING_CODE_LEN, packet_sizes},
@@ -178,10 +178,9 @@ pub struct PacketEventData {
     pub event_details: EventDataDetails,
 }
 
+impl_has_header!(PacketEventData);
+
 impl RawPacket for PacketEventData {
-    fn header(&self) -> &PacketHeader {
-        &self.header
-    }
     fn from_bytes(bytes: &[u8]) -> Result<Self, PacketError> {
         let expected_len = std::mem::size_of::<PacketEventData>();
         if bytes.len() != expected_len {
@@ -201,6 +200,18 @@ impl RawPacket for PacketEventData {
         event_string_code.copy_from_slice(&bytes[header_size..header_size + EVENT_STRING_CODE_LEN]);
 
         // --- Event Details (union) ---
+        let union_start = header_size + EVENT_STRING_CODE_LEN;
+        let union_len = std::mem::size_of::<EventDataDetails>();
+
+        if bytes.len() < union_start + union_len {
+            return Err(PacketError::InvalidLength {
+                expected: union_start + union_len,
+                actual: bytes.len(),
+            });
+        }
+
+        let union_bytes = &bytes[union_start..union_start + union_len];
+
         let mut event_details = EventDataDetails {
             fastest_lap: FastestLap {
                 vehicle_idx: 0,
@@ -208,14 +219,11 @@ impl RawPacket for PacketEventData {
             },
         };
 
-        let union_start = header_size + EVENT_STRING_CODE_LEN;
-        let union_bytes = &bytes[union_start..];
-
         unsafe {
             std::ptr::copy_nonoverlapping(
                 union_bytes.as_ptr(),
                 &mut event_details as *mut _ as *mut u8,
-                std::mem::size_of::<EventDataDetails>(),
+                union_len,
             );
         }
 
@@ -224,6 +232,15 @@ impl RawPacket for PacketEventData {
             event_string_code,
             event_details,
         })
+    }
+
+    fn into_bytes(&self) -> &[u8] {
+        unsafe {
+            std::slice::from_raw_parts(
+                (self as *const Self) as *const u8,
+                std::mem::size_of::<Self>(),
+            )
+        }
     }
 }
 

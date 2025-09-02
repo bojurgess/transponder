@@ -2,7 +2,7 @@ use bytemuck::{Pod, Zeroable};
 
 use crate::{
     assert_packet_size,
-    packet::{PacketError, RawPacket},
+    packet::impl_has_header,
     raw::{
         PacketHeader,
         constants::{
@@ -204,23 +204,6 @@ pub struct PacketSessionData {
     pub sector3_lap_distance_start: f32,
 }
 
-impl RawPacket for PacketSessionData {
-    fn header(&self) -> &PacketHeader {
-        &self.header
-    }
-    fn from_bytes(bytes: &[u8]) -> Result<Self, PacketError> {
-        let expected_len = std::mem::size_of::<Self>();
-        if bytes.len() != expected_len {
-            return Err(PacketError::InvalidLength {
-                expected: expected_len,
-                actual: bytes.len(),
-            });
-        }
-
-        bytemuck::try_from_bytes::<Self>(bytes)
-            .map(|p| *p)
-            .map_err(|e| PacketError::BytemuckError(e.to_string()))
-    }
-}
+impl_has_header!(PacketSessionData);
 
 assert_packet_size!(PacketSessionData, packet_sizes::SESSION);
